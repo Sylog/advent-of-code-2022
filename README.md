@@ -7,7 +7,7 @@ Here you may publish your solutions for [advent of code 2022](https://adventofco
 | Namn / Github tag                                         | Lösningar                                                                         |
 | --------------------------------------------------------- |-----------------------------------------------------------------------------------|
 | [@codecontemplator](https://github.com/codecontemplator)  | [./codecontemplator](./codecontemplator)                                          |
-|                                                           |                                                                                   |
+| [@Dyr-El](https://github.com/Dyr-El)                      | [./Dyr-El](./Dyr-El)                                                              |
 |                                                           |                                                                                   |
 |                                                           |                                                                                   |
 |                                                           |                                                                                   |
