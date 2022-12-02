@@ -11,6 +11,6 @@ Here you may publish your solutions for [advent of code 2022](https://adventofco
 | [@codecontemplator](https://github.com/codecontemplator)       | [./codecontemplator](./codecontemplator)                          |
 | [@Dyr-El](https://github.com/Dyr-El)                           | [./Dyr-El](./Dyr-El)                                              |
 | [@nicoloridulfo](https://github.com/nicoloridulfo) (Neodev AB) | [advent-of-code](https://github.com/nicoloridulfo/advent-of-code) |
-|                                                                |                                                                   |
+| [@d94asu](https://github.com/d94asu)                           | [./d94asu](./d94asu)                                              |
 |                                                                |                                                                   |
 |                                                                |                                                                   |
