@@ -6,10 +6,6 @@
   (def text (slurp fn))
   (partition 3 (str/split-lines text)))
 
-(defn splitInHalf [s]
-    (def half (/ (count s) 2))
-    [(subs s 0 half) (subs s half)])
-
 (defn priority [ch]
   (if 
     (Character/isUpperCase ch)    
