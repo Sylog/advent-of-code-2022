@@ -2,3 +2,6 @@
 	path = Dyr-El
 	url = https://github.com/Dyr-El/AdventOfCode2022.git
 
+[submodule "DanielAhlsen"]
+	path = DanielAhlsen
+	url = https://github.com/DanielAhlsen/AoC-2022.git
