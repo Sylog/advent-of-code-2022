@@ -4,3 +4,8 @@
 [submodule "DanielAhlsen"]
 	path = DanielAhlsen
 	url = https://github.com/DanielAhlsen/AoC-2022
+
+
+[submodule "BorZag"]
+	path = BorZag
+	url = https://github.com/borzag/Advent_of_code_2022

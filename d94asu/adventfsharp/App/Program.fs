@@ -10,4 +10,5 @@ let main args =
         Aoc.two args[1..]
     else
         raise (System.ArgumentException("Wrong arguments"))
+    |> ignore
     0
