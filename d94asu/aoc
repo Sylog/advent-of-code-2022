@@ -1,0 +1,45 @@
+#!/usr/bin/bash
+
+usage () {
+    echo "script usage: $(basename $0) <command> <arguments>"  >&2
+    echo "Script to build and run software in this directory"
+    echo "requires dotnet"
+    echo
+    echo "commands:"
+    echo "    switchday <directory>"
+    echo "      Switch current source directory. Directories are in two digits"
+    echo "    currentday"
+    echo "      Show which the currently directory is"
+    echo "    dnbuild"
+    echo "      Build software in current directory"
+    echo "    dnrun <part> <arguments>"
+    echo "      Run part 1 or 2"
+    echo "      Typically usage looks like this"
+    echo "    dnrun <part> <input file>"
+    echo "      input file as basename without extension"
+}
+
+case $1 in
+
+   switchday)
+       sed -i "s@/../aoc.fs@/$2/aoc.fs@" adventfsharp/App/App.fsproj
+       ;;
+
+   currentday)
+       grep -Eo '[0-9]{2,2}' adventfsharp/App/App.fsproj
+       ;;
+
+   dnbuild)
+       shift
+       dotnet.exe build adventfsharp/App/ $@
+       ;;
+       
+   dnrun)
+       shift
+       dotnet.exe run --project adventfsharp/App/ $@
+       ;;
+       
+   *)
+      usage
+      ;;
+esac
