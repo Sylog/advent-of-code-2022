@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <Compile Include="lib.fs" />
-    <Compile Include="../../08/aoc.fs" />
+    <Compile Include="../../09/aoc.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
