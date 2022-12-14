@@ -5,17 +5,17 @@ open System
 open FSharpx
 
 type Operation =
-    | Mult of int
-    | Add of int
+    | Mult of int64
+    | Add of int64
     | Square
 
 type Monkey = {
     id: int
     opreation: Operation
-    testDevisor: int
+    testDivisor: int64
     trueMonkey: int
     falseMonkey: int
-    itemsInspected: int
+    itemsInspected: int64
 }
 
 module Queue =
@@ -25,7 +25,7 @@ module Queue =
     let add a i v =
         Array.set a i (v :: a[i])
 
-    let flush (a: (int list)[]) i =
+    let flush (a: (int64 list)[]) i =
         let backwords = a[i]
         Array.set a i []
         List.rev backwords
@@ -53,9 +53,9 @@ let createMonkey queues lines =
 
     let createOp =
         function
-        | ("+", arg) -> Int32.Parse arg |> Add
+        | ("+", arg) -> Int64.Parse arg |> Add
         | ("*", "old") -> Square
-        | ("*", arg) -> Int32.Parse arg |> Mult
+        | ("*", arg) -> Int64.Parse arg |> Mult
         | _ -> failwith "operation parse error"
 
     let addItems index items =
@@ -73,12 +73,12 @@ let createMonkey queues lines =
             ] ->
             let i = Int32.Parse id
             items
-            |> List.map Int32.Parse
+            |> List.map Int64.Parse
             |> addItems i
             {
                 id = i
                 opreation = createOp (op, arg)
-                testDevisor = Int32.Parse divisor
+                testDivisor = Int64.Parse divisor
                 trueMonkey = Int32.Parse trueMonkey
                 falseMonkey = Int32.Parse falseMonkey
                 itemsInspected = 0
@@ -109,24 +109,25 @@ let parse lines =
 
     (queues, List.map (createMonkey queues) ms)
 
-let playRound (factor, queues, monkeys) =
+let playRound (factor, bigDivisor, queues, monkeys) =
     let operate arg1 =
+        let arg1' = arg1 % bigDivisor
         function
-        | Add arg2 -> arg1 + arg2
-        | Mult arg2 -> arg1 * arg2
-        | Square -> arg1 * arg1
+        | Add arg2 -> arg1' + arg2
+        | Mult arg2 -> arg1' * arg2
+        | Square -> arg1' * arg1'
 
     let inspect (monkey: Monkey) item =
         let a = operate item monkey.opreation
         let b = a / factor
-        if (b % monkey.testDevisor) = 0 then
+        if (b % monkey.testDivisor) = 0 then
             Queue.add queues monkey.trueMonkey b
         else
             Queue.add queues monkey.falseMonkey b
 
     let playTurn monkey =
         let items = Queue.flush queues monkey.id
-        let n = List.length items
+        let n: int64 = List.length items
         List.iter (inspect monkey) items        
         { monkey with itemsInspected = monkey.itemsInspected + n }
 
@@ -134,15 +135,13 @@ let playRound (factor, queues, monkeys) =
         monkeys
         |> List.map playTurn
     
-    (factor, queues, monkeys')
+    (factor, bigDivisor, queues, monkeys')
 
 let rec playRounds n state =
     let calc =
         function
         | a :: b :: _ ->
-            let a64 = int64 a
-            let b64 = int64 b
-            a64 * b64
+            a * b
         | _ -> failwith "too few monkeys"
 
     if n > 0 then
@@ -150,7 +149,7 @@ let rec playRounds n state =
         |> playRound
         |> playRounds (n - 1)
     else
-        let (_, _, ms) = state
+        let (_, _, _, ms) = state
         List.map (fun m -> m.itemsInspected) ms
         |> List.sort
         |> List.rev
@@ -161,19 +160,26 @@ let checkArgs args =
     | [| fn |] -> fn
     | _ -> raise (System.ArgumentException("Wrong number of arguments"))
 
-let main factor rounds fn =
+let readFile fn =
     lib.readFile __SOURCE_DIRECTORY__ fn
     |> Seq.toList
     |> parse
-    |> fun (qs, ms) -> (factor, qs, ms)
+
+let playGame factor rounds (queues, monkeys) =
+    let bigDivisor =
+        monkeys
+        |> List.fold (fun acc m -> acc * m.testDivisor) 1L
+    (factor, bigDivisor, queues, monkeys)
     |> playRounds rounds
 
 let one args =
     checkArgs args
-    |> main 3 20
+    |> readFile
+    |> playGame 3L 20
     |> printfn "%i"
 
 let two args =
     checkArgs args
-    |> main 1 10000
+    |> readFile
+    |> playGame 1L 10000
     |> printfn "%i"
